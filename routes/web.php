@@ -18,3 +18,6 @@ Route::post('/logout', [LogoutController::class, 'logout']);
 // SSO start (Authorization Code flow)
 Route::get('/sso/start', [SsoController::class, 'start']);
 
+Route::get('/', function() {
+    return 'Auth-app Laravel is running!';
+});
