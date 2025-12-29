@@ -14,7 +14,7 @@ use App\Http\Controllers\Sso\SsoController;
 // ログイン / ログアウト
 Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LogoutController::class, 'logout']);
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 // SSO start (Authorization Code flow)
 Route::get('/sso/start', [SsoController::class, 'start']);
