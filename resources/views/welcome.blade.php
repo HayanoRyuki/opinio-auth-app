@@ -18,12 +18,6 @@
                 <a href="https://ats.opinio.co.jp" class="block text-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded transition">ATS アプリ</a>
                 <a href="https://other.opinio.co.jp" class="block text-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded transition">別アプリ</a>
             </div>
-
-            <form method="POST" action="{{ route('logout') }}" class="mt-6">
-                @csrf
-                <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition">ログアウト</button>
-            </form>
-
         @else
             <form method="POST" action="{{ route('login') }}" class="space-y-4">
                 @csrf
