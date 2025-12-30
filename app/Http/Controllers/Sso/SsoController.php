@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\SsoCode;
+use App\Models\Membership;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,8 +39,9 @@ class SsoController extends Controller
             abort(401, 'not_authenticated');
         }
 
-        // 疎通確認用（暫定）
-        $companyId = 1;
+        // company / role は Membership から取得
+        $membership = Membership::where('user_id', $user->id)
+            ->firstOrFail();
 
         $code = Str::random(64);
 
@@ -47,8 +49,8 @@ class SsoController extends Controller
             'id'         => (string) Str::uuid(),
             'code'       => $code,
             'user_id'    => $user->id,
-            'company_id' => $companyId,
-            'role'       => 'admin',
+            'company_id' => $membership->company_id,
+            'role'       => $membership->role,
             'client_id'  => $clientId,
             'expires_at' => now()->addMinutes(5),
         ]);
