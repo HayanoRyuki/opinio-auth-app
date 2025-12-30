@@ -27,7 +27,7 @@
 
         <div class="space-y-4">
             <a
-              href="{{ url('/sso/start') }}?client_id=ats&redirect_uri={{ urlencode('https://ats.opinio.co.jp') }}&state={{ $state }}"
+              href="{{ url('/sso/start') }}?client_id=ats&redirect_uri={{ urlencode('https://ats.opinio.co.jp/sso/callback') }}&state={{ $state }}"
               class="block text-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded transition"
             >
               ATS アプリ

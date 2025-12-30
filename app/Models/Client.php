@@ -16,6 +16,10 @@ class Client extends Model
         'status',
     ];
 
+    protected $casts = [
+        'allowed_redirect_uris' => 'array',
+    ];
+
     public $incrementing = false;
     protected $keyType = 'string';
 }
