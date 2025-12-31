@@ -17,12 +17,10 @@ class SsoController extends Controller
         $redirectUri = $request->query('redirect_uri');
         $state       = $request->query('state');
 
-        // 必須パラメータチェック
         if (! $clientId || ! $redirectUri) {
             abort(400, 'invalid_request');
         }
 
-        // client 検証
         $client = Client::where('client_id', $clientId)
             ->where('status', 'active')
             ->first();
@@ -31,43 +29,35 @@ class SsoController extends Controller
             abort(400, 'invalid_client');
         }
 
-        // redirect_uri 検証
         if (! in_array($redirectUri, (array) $client->allowed_redirect_uris, true)) {
             abort(400, 'invalid_redirect_uri');
         }
 
-        // 認証済みユーザー取得
         $user = Auth::user();
         if (! $user) {
             abort(401, 'not_authenticated');
         }
 
-        /**
-         * client_user（clients リレーション）から membership を取得
-         * ※ role / client 紐づきはここだけを見る
-         */
         $clientUser = $user->clients()
-            ->where('clients.client_id', $client->client_id) // ★ ここが修正点
+            ->where('clients.client_id', $client->client_id)
             ->first();
 
         if (! $clientUser) {
             abort(403, 'no_client_membership');
         }
 
-        // SSO コード発行
         $code = Str::random(64);
 
         SsoCode::create([
             'id'         => (string) Str::uuid(),
             'code'       => $code,
             'user_id'    => $user->id,
-            'company_id' => $user->company_id,
+            'company_id' => $client->company_id, // ★ 修正点
             'role'       => $clientUser->pivot->role,
             'client_id'  => $clientId,
             'expires_at' => now()->addMinutes(5),
         ]);
 
-        // ATS にリダイレクト
         return redirect()->to(
             $redirectUri
             . '?code=' . urlencode($code)
