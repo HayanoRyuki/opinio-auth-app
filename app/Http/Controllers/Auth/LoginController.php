@@ -9,7 +9,15 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /**
-     * ログイン処理
+     * ログイン画面表示（GET /login）
+     */
+    public function show()
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * ログイン処理（POST /login）
      */
     public function login(Request $request)
     {
