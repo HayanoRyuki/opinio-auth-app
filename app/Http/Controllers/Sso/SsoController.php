@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\SsoCode;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class SsoController extends Controller
 {
@@ -47,7 +47,7 @@ class SsoController extends Controller
          * ※ role / client 紐づきはここだけを見る
          */
         $clientUser = $user->clients()
-            ->where('client_id', $client->client_id)
+            ->where('clients.client_id', $client->client_id) // ★ ここが修正点
             ->first();
 
         if (! $clientUser) {
@@ -55,14 +55,14 @@ class SsoController extends Controller
         }
 
         // SSO コード発行
-        $code = \Illuminate\Support\Str::random(64);
+        $code = Str::random(64);
 
         SsoCode::create([
-            'id'         => (string) \Illuminate\Support\Str::uuid(),
+            'id'         => (string) Str::uuid(),
             'code'       => $code,
             'user_id'    => $user->id,
             'company_id' => $user->company_id,
-            'role'       => $clientUser->pivot->role ?? null,
+            'role'       => $clientUser->pivot->role,
             'client_id'  => $clientId,
             'expires_at' => now()->addMinutes(5),
         ]);
