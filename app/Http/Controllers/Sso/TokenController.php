@@ -55,12 +55,11 @@ class TokenController extends Controller
         |--------------------------------------------------------------------------
         */
         $jwt = app(JwtService::class)->issue([
-            'sub'        => (string) $ssoCode->user_id,
-            'company_id' => (string) $ssoCode->company_id,
-            'role'       => $ssoCode->role,
-            'aud'        => $client->audience,
-        ]);
-
+    'sub'        => (string) $ssoCode->user_id,
+    'company_id' => (string) $ssoCode->company_id,
+    'role'       => $ssoCode->role,
+    'aud'        => 'ats.opinio.co.jp', // ← ★ここを固定
+]);
         /*
         |--------------------------------------------------------------------------
         | 4. code を使い捨てにする
