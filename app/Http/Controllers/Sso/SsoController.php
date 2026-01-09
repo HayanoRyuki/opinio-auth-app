@@ -13,48 +13,44 @@ class SsoController extends Controller
 {
     public function start(Request $request)
     {
-        $clientId    = $request->query('client_id');
+        $clientSlug  = $request->query('client_id'); // ats
         $redirectUri = $request->query('redirect_uri');
         $state       = $request->query('state');
 
-        if (! $clientId || ! $redirectUri) {
+        if (! $clientSlug || ! $redirectUri) {
             abort(400, 'invalid_request');
         }
 
-        $client = Client::where('client_id', $clientId)
-            ->where('status', 'active')
-            ->first();
-
+        // client = slug で取得
+        $client = Client::where('slug', $clientSlug)->first();
         if (! $client) {
             abort(400, 'invalid_client');
         }
 
-        if (! in_array($redirectUri, (array) $client->allowed_redirect_uris, true)) {
-            abort(400, 'invalid_redirect_uri');
-        }
-
+        // ログイン確認
         $user = Auth::user();
         if (! $user) {
             abort(401, 'not_authenticated');
         }
 
+        // client 所属確認（pivot）
         $clientUser = $user->clients()
-            ->where('clients.client_id', $client->client_id)
+            ->where('clients.id', $client->id)
             ->first();
 
         if (! $clientUser) {
             abort(403, 'no_client_membership');
         }
 
+        // SSO code 発行
         $code = Str::random(64);
 
         SsoCode::create([
             'id'         => (string) Str::uuid(),
             'code'       => $code,
             'user_id'    => $user->id,
-            'company_id' => $client->company_id, // ★ 修正点
             'role'       => $clientUser->pivot->role,
-            'client_id'  => $clientId,
+            'client_id'  => $client->id,
             'expires_at' => now()->addMinutes(5),
         ]);
 
