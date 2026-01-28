@@ -61,13 +61,13 @@ npm run build
 |------|-----|
 | OS | Ubuntu 22.04 |
 | User | ubuntu |
-| Public IP | 18.183.148.129 |
+| Public IP | 3.114.99.99 |
 | 秘密鍵 | ~/.ssh/opinio-2026.pem |
 | アプリパス | /var/www/auth-app |
 
 ### 直接接続
 ```bash
-ssh -i ~/.ssh/opinio-2026.pem ubuntu@18.183.148.129
+ssh -i ~/.ssh/opinio-2026.pem ubuntu@3.114.99.99
 ```
 
 ### 接続後の作業
@@ -137,7 +137,7 @@ ssh -i ~/opinio-2026.pem ubuntu@10.0.4.1
 ### ブランチ
 | ブランチ名 | 用途 |
 |-----------|------|
-| production-stable | 本番と常に同期 |
+| main | 本番と常に同期 |
 | fix/* | 一時修正・開発用 |
 
 ### デプロイ手順
@@ -146,14 +146,17 @@ ssh -i ~/opinio-2026.pem ubuntu@10.0.4.1
 ```bash
 git add .
 git commit -m "update: <内容> (YYYY-MM-DD)"
-git push origin production-stable
+git push origin main
 ```
 
 #### 本番
 ```bash
 cd /var/www/auth-app
 git fetch origin
-git reset --hard origin/production-stable
+git reset --hard origin/main
+composer install
+npm install
+npm run build
 php artisan optimize:clear
 ```
 
@@ -236,10 +239,10 @@ resources/
 ### SSH接続エラー
 ```bash
 # known_hostsクリア
-ssh-keygen -R 18.183.148.129
+ssh-keygen -R 3.114.99.99
 
 # 詳細ログ
-ssh -v -i ~/.ssh/opinio-2026.pem ubuntu@18.183.148.129
+ssh -v -i ~/.ssh/opinio-2026.pem ubuntu@3.114.99.99
 ```
 
 ### Laravelキャッシュクリア
@@ -261,9 +264,11 @@ npm run build
 ## 最短フロー
 
 ```
-ローカル修正 → git push origin production-stable
+ローカル修正 → git push origin main
                 ↓
-        本番 git fetch + reset
+        本番 git fetch + reset --hard origin/main
+                ↓
+        composer install → npm install → npm run build
                 ↓
         php artisan optimize:clear
 ```
