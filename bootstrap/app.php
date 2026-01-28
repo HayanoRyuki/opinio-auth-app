@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\VerifyJwt;
 use App\Http\Middleware\InternalToken;
+use App\Http\Middleware\HandleInertiaRequests;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+
+        // Inertia ミドルウェア
+        $middleware->web(append: [
+            HandleInertiaRequests::class,
+        ]);
 
         // JWT 検証（ATS 用）
         $middleware->alias([
