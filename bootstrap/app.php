@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\VerifyJwt;
 use App\Http\Middleware\InternalToken;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\AdminMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verify.jwt'    => VerifyJwt::class,
             'internal.token'=> InternalToken::class,
+            'admin'         => AdminMiddleware::class,
         ]);
 
     })

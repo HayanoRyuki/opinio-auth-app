@@ -16,4 +16,12 @@ class Membership extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
+
+    /**
+     * ユーザーリレーション
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

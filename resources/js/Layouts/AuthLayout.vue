@@ -3,6 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 const user = page.props.auth?.user;
+const isAdmin = page.props.auth?.isAdmin;
 </script>
 
 <template>
@@ -18,6 +19,13 @@ const user = page.props.auth?.user;
                     </div>
                     <div class="flex items-center space-x-4">
                         <span class="text-sm text-gray-600">{{ user.email }}</span>
+                        <Link
+                            v-if="isAdmin"
+                            href="/admin/members"
+                            class="text-sm text-purple-600 hover:text-purple-800"
+                        >
+                            メンバー管理
+                        </Link>
                         <Link
                             href="/profile"
                             class="text-sm text-blue-600 hover:text-blue-800"

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Client;
+use App\Models\Membership;
 
 class User extends Authenticatable
 {
@@ -60,5 +61,33 @@ class User extends Authenticatable
             'user_id',
             'client_id'
         )->withPivot('role');
+    }
+
+    /**
+     * 会社内メンバーシップ
+     */
+    public function memberships()
+    {
+        return $this->hasMany(Membership::class, 'user_id');
+    }
+
+    /**
+     * 現在の会社でのメンバーシップを取得
+     */
+    public function currentMembership()
+    {
+        return $this->memberships()
+            ->where('company_id', $this->company_id)
+            ->where('status', 'active')
+            ->first();
+    }
+
+    /**
+     * 現在の会社でadmin権限を持っているか
+     */
+    public function isAdmin(): bool
+    {
+        $membership = $this->currentMembership();
+        return $membership && $membership->role === 'admin';
     }
 }
