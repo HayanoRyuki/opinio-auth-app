@@ -71,9 +71,12 @@ class LoginController extends Controller
             ];
         }
 
+        $user = Auth::user();
+
         return Inertia::render('Welcome', [
             'auth' => [
-                'user' => Auth::user(),
+                'user' => $user,
+                'isAdmin' => $user ? $user->isAdmin() : false,
             ],
             'ssoLinks' => $ssoLinks,
         ]);
