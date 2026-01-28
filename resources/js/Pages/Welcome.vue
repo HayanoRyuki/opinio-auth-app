@@ -32,7 +32,7 @@ const apps = [
         icon: ClipboardDocumentListIcon,
         color: 'bg-blue-500 hover:bg-blue-600',
         available: true,
-        url: '/sso/start?client_id=opinio-ats',
+        url: '/sso/start?client_id=ats&redirect_uri=' + encodeURIComponent('https://ats.opinio.co.jp/sso/callback'),
     },
     {
         name: 'キャリア',
