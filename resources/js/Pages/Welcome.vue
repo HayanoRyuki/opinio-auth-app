@@ -51,6 +51,13 @@ const submit = () => {
 
                 <div class="mt-6 flex justify-center space-x-4">
                     <Link
+                        v-if="auth?.isAdmin"
+                        href="/admin/members"
+                        class="text-sm text-purple-600 hover:underline"
+                    >
+                        メンバー管理
+                    </Link>
+                    <Link
                         href="/profile"
                         class="text-sm text-blue-600 hover:underline"
                     >
