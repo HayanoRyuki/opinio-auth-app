@@ -24,8 +24,8 @@ class MemberController extends Controller
         $companyId = $user->company_id;
 
         // 同じ会社のメンバーシップを取得
-        $members = Membership::where('company_id', $companyId)
-            ->where('status', 'active')
+        $members = Membership::where('memberships.company_id', $companyId)
+            ->where('memberships.status', 'active')
             ->join('users', 'memberships.user_id', '=', 'users.id')
             ->select('memberships.*', 'users.name', 'users.email')
             ->orderBy('users.name')
