@@ -82,24 +82,24 @@ const apps = [
 
             <!-- ログイン済み -->
             <template v-if="auth?.user">
-                <div class="bg-white shadow-xl rounded-2xl p-8 border border-slate-200">
+                <div class="bg-white shadow-xl rounded-2xl p-4 sm:p-8 border border-slate-200">
                     <!-- ユーザー情報 -->
-                    <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
-                        <div>
-                            <p class="text-sm text-slate-500">ログイン中</p>
-                            <p class="font-medium text-slate-800">{{ auth.user.email }}</p>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 pb-4 border-b border-slate-100">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-xs text-slate-500">ログイン中</p>
+                            <p class="font-medium text-slate-800 text-sm sm:text-base truncate">{{ auth.user.email }}</p>
                         </div>
-                        <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-3 text-xs sm:text-sm">
                             <Link
                                 v-if="auth?.isAdmin"
                                 href="/admin/members"
-                                class="text-sm text-purple-600 hover:text-purple-800 font-medium"
+                                class="text-purple-600 hover:text-purple-800 font-medium whitespace-nowrap"
                             >
                                 メンバー管理
                             </Link>
                             <Link
                                 href="/profile"
-                                class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                class="text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap"
                             >
                                 プロフィール
                             </Link>
@@ -107,7 +107,7 @@ const apps = [
                                 href="/logout"
                                 method="post"
                                 as="button"
-                                class="text-sm text-slate-500 hover:text-slate-700"
+                                class="text-slate-500 hover:text-slate-700 whitespace-nowrap"
                             >
                                 ログアウト
                             </Link>
@@ -162,8 +162,8 @@ const apps = [
 
             <!-- 未ログイン -->
             <template v-else>
-                <div class="bg-white shadow-xl rounded-2xl p-8 border border-slate-200">
-                    <h2 class="text-xl font-bold text-center text-slate-800 mb-6">
+                <div class="bg-white shadow-xl rounded-2xl p-4 sm:p-8 border border-slate-200">
+                    <h2 class="text-lg sm:text-xl font-bold text-center text-slate-800 mb-6">
                         ログイン
                     </h2>
                     <form @submit.prevent="submit" class="space-y-4">
